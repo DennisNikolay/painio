@@ -2,10 +2,10 @@
   "name": "painio-server",
   "version": "0.0.1",
   "description": "a backend server implementation for painio",
-  "main": "./dist/server/startServer.js",
+  "main": "../dist/server/startServer.js",
   "scripts": {
     "build": "tsc",
-    "start": "node ./dist/server/startServer.js",
+    "start": "node ../dist/server/startServer.js",
     "test": "jest"
   },
   "repository": {
@@ -26,11 +26,15 @@
   "homepage": "https://github.com/DennisNikolay/painio#readme",
   "dependencies": {
     "express": "^4.16.2",
+    "randomstring": "^1.1.5",
     "ws": "^4.0.0"
   },
   "devDependencies": {
     "@types/express": "^4.11.1",
     "@types/ws": "^4.0.1",
-    "typescript": "^2.7.2"
+    "awesome-typescript-loader": "^3.4.1",
+    "source-map-loader": "^0.2.3",
+    "typescript": "^2.7.2",
+    "webpack": "^3.11.0"
   }
 }
