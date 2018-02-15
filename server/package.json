@@ -1,0 +1,36 @@
+{
+  "name": "painio-server",
+  "version": "0.0.1",
+  "description": "a backend server implementation for painio",
+  "main": "./dist/server/startServer.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node ./dist/server/startServer.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/DennisNikolay/painio.git"
+  },
+  "keywords": [
+    "painIO",
+    "canvas",
+    "drawing",
+    "game"
+  ],
+  "author": "Dennis Nikolay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DennisNikolay/painio/issues"
+  },
+  "homepage": "https://github.com/DennisNikolay/painio#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "ws": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.11.1",
+    "@types/ws": "^4.0.1",
+    "typescript": "^2.7.2"
+  }
+}
