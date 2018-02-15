@@ -122,7 +122,13 @@ backButton.onclick = function (){
 	xList.splice(xList.length-cut,xList.length);
 	yList.splice(yList.length-cut,yList.length);
 	dList.splice(dList.length-cut,dList.length);
-	strokeList.splice(0,1);
+	strokeList.splice(strokeList.length-1,strokeList.length);
+	cut=0;
+    var str=""
+    for(var i=0;i< strokeList.length;i++){
+        str += " " + strokeList[i] + "\n";
+    }
+    console.log(str);
 	redraw();
 	
 };
