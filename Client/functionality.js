@@ -51,7 +51,7 @@ canvas.onmousedown = function(e){
 canvas.onmousemove = function(e){
 	if(paint){
 		addClick(e.pageX-this.offsetLeft,e.pageY-this.offsetTop,true);
-		
+
 		redraw(canvasData);
 	}
 };
@@ -141,7 +141,7 @@ backButton.onclick = function (){
 };
 
 slider.oninput= function () {
-	canvasData.thickness = this.value;
+	thickness = this.value;
 };
 
 paintBox.onclick = function (e){
