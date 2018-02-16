@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { DrawingCanvas } from "./components/DrawingCanvas";
 
-const server = "ws://localhost:8999";
+const server = "ws://lame-game.com:8999";
 const lobbyCode = window.location.search.substr(1) || "";
 
 let socket = new WebSocket(server);
