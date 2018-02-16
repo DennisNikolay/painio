@@ -23,11 +23,11 @@ const EchoServer = (server: Server) => {
             appState = newState.appState;
 
 
-            if(message.startsWith("SAY") && message.length>3){
+            if(message.startsWith("DOT") && message.length>3){
                 let userLobby: Lobby = appState.lobbies.filter((element: Lobby) => element.lobbyCode == clientState.lobby)[0];
                 userLobby.users.forEach(
                     (user: User) => {
-                        user.socket.send(message.substring(3));
+                        user.socket.send(message);
                     }
                 );
             }

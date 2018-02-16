@@ -1,0 +1,33 @@
+{
+  "name": "painio-client",
+  "version": "0.0.1",
+  "description": "a frontend client implementation for painio",
+  "main": "./dist/index.html",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/DennisNikolay/painio.git"
+  },
+  "keywords": [
+    "painIO",
+    "canvas",
+    "drawing",
+    "game"
+  ],
+  "author": "Max Biwersi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DennisNikolay/painio/issues"
+  },
+  "homepage": "https://github.com/DennisNikolay/painio#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/react": "^16.0.38",
+    "@types/react-dom": "^16.0.4",
+    "awesome-typescript-loader": "^3.4.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "source-map-loader": "^0.2.3",
+    "typescript": "^2.7.2"
+  }
+}
