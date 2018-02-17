@@ -5,7 +5,7 @@
   "main": "../dist/server/startServer.js",
   "scripts": {
     "build": "tsc",
-    "start": "node ../dist/server/startServer.js",
+    "start": "node ./dist/startServer.js",
     "test": "jest"
   },
   "repository": {
