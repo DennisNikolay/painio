@@ -1,5 +1,5 @@
 import {CLIENT_LOBBY_STATE_MESSAGES, CLIENT_MESSAGE_LENGTH, } from "../constants/ClientToServerMessages";
-import {SERVER_ERROR_MESSAGES, SERVER_ERROR_CODES} from "../constants/ServerToClientMessages";
+import {SERVER_ERROR_MESSAGES, SERVER_ERROR_CODES, SERVER_LOBBY_STATE_MESSAGES} from "../constants/ServerToClientMessages";
 import { User } from "../User";
 import { Lobby, LOBBY_CODE_LENGTH, LOBBY_MAX_PLAYER, LOBBY_MIN_PLAYER } from './Lobby';
 import { Application } from "../Application";
@@ -53,7 +53,7 @@ export const LobbyMessageHandler = (clientState: User, appState: Application, ms
             }
             let userLobby = appState.lobbies.filter((element: Lobby) => element.lobbyCode == clientState.lobby).map((element: Lobby) => {return {user_count: element.users.length, lobbyCode: element.lobbyCode}})[0];
             console.log(userLobby);
-            clientState.socket.send(JSON.stringify(userLobby));
+            clientState.socket.send(SERVER_LOBBY_STATE_MESSAGES.CONNECTION_ACCEPTED.concat(JSON.stringify(userLobby)));
         break;       
     }
     return {clientState, appState};

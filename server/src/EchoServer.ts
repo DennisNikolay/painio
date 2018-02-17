@@ -5,6 +5,7 @@ import { User } from './User';
 import { LobbyMessageHandler } from './lobby/LobbyMessageHandler';
 import { Application } from './Application';
 import { Lobby } from './lobby/Lobby'
+import { DrawingHandler } from './drawing/DrawingHandler';
 
 const EchoServer = (server: Server) => {
 
@@ -15,23 +16,15 @@ const EchoServer = (server: Server) => {
     ws.on('connection', (ws: WebSocket) => {
         console.log("client connected");
         let clientState: User = {"lobby": "", "socket": ws};
-        ws.send(SERVER_LOBBY_STATE_MESSAGES.CONNECTION_ACCEPTED);
         
         ws.on('message', (message: string) => {
             let newState = LobbyMessageHandler(clientState, appState, message);
             clientState = newState.clientState;
             appState = newState.appState;
 
-
-            if(message.startsWith("DOT") && message.length>3){
-                let userLobby: Lobby = appState.lobbies.filter((element: Lobby) => element.lobbyCode == clientState.lobby)[0];
-                userLobby.users.forEach(
-                    (user: User) => {
-                        user.socket.send(message);
-                    }
-                );
-            }
-
+            newState = DrawingHandler(clientState, appState, message);
+            clientState = newState.clientState;
+            appState = newState.appState;
 
         });
     
