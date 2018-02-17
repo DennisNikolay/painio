@@ -12,7 +12,7 @@ export class ClientDrawingCanvas extends ServerDrawingCanvas{
         super.componentDidMount();
         this.props.socket.send(
             CLIENT_MESSAGES.CLIENT_DRAW_MESSAGES.CHANGE_TOOL.concat(
-                JSON.stringify(this.state.drawTool)
+                JSON.stringify(this.state.drawTools.find((tool) => tool.user == this.props.user.identifier))
             )
         );
     }
@@ -26,6 +26,7 @@ export class ClientDrawingCanvas extends ServerDrawingCanvas{
                     (
                         JSON.stringify(
                             {
+                                user: this.props.user.identifier,
                                 p: this.state.drawPoints[0], 
                             }
                         )
@@ -41,6 +42,7 @@ export class ClientDrawingCanvas extends ServerDrawingCanvas{
                     (
                         JSON.stringify(
                             {
+                                user: this.props.user.identifier,
                                 p: this.state.drawPoints[i], 
                                 q: this.state.drawPoints[i+1]
                             }

@@ -8,14 +8,14 @@ import { Lobby } from './lobby/Lobby'
 import { DrawingHandler } from './drawing/DrawingHandler';
 
 const EchoServer = (server: Server) => {
-
+    let idCounter: number = 0;
     const ws = new WebSocket.Server({ server });
     let appState: Application = {
         lobbies: []
     };
     ws.on('connection', (ws: WebSocket) => {
         console.log("client connected");
-        let clientState: User = {"lobby": "", "socket": ws};
+        let clientState: User = {"lobby": "", "socket": ws, drawTool: {}, identifier: idCounter++};
         
         ws.on('message', (message: string) => {
             let newState = LobbyMessageHandler(clientState, appState, message);

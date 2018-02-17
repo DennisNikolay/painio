@@ -1,12 +1,24 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import  { ClientDrawingCanvas  as DrawingCanvas} from "./components/ClientDrawingCanvas";
+import { CLIENT_MESSAGES, SERVER_MESSAGES, SERVER_MESSAGE_LENGTH } from './constants/ProtocolMessages';
 
 const server = "ws://localhost:8999";
 const lobbyCode = window.location.search.substr(1) || ""; //?aovjoandvoßa
 
 let socket = new WebSocket(server);
 socket.onopen= (e: Event) => {
-    socket.send("LOB".concat(lobbyCode));
-    ReactDOM.render( <DrawingCanvas width={1280} height={1024} socket={socket} />, document.getElementById("example"));
+    let payload = JSON.parse("{\"requested_lobby\":\"".concat(lobbyCode).concat("\"}"));
+    socket.send(CLIENT_MESSAGES.CLIENT_LOBBY_STATE_MESSAGES.REQUEST_LOBBY.concat(payload));
+    socket.onmessage = (ev: MessageEvent) => {
+        if(typeof ev.data == 'string'){
+            let cmd = ev.data.substring(0, SERVER_MESSAGE_LENGTH);
+            if(cmd == SERVER_MESSAGES.SERVER_LOBBY_STATE_MESSAGES.CONNECTION_ACCEPTED){
+                let payload = JSON.parse(ev.data.substring(SERVER_MESSAGE_LENGTH));
+
+                ReactDOM.render( <DrawingCanvas width={1280} height={1024} socket={socket} user={{identifier: payload.identfier}} />, document.getElementById("example"));
+
+            }
+        }
+    }
 };

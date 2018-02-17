@@ -51,7 +51,7 @@ export const LobbyMessageHandler = (clientState: User, appState: Application, ms
                     validLobbies[index].users.push(clientState);
                 }
             }
-            let userLobby = appState.lobbies.filter((element: Lobby) => element.lobbyCode == clientState.lobby).map((element: Lobby) => {return {user_count: element.users.length, lobbyCode: element.lobbyCode}})[0];
+            let userLobby = appState.lobbies.filter((element: Lobby) => element.lobbyCode == clientState.lobby).map((element: Lobby) => {return {user_identifier: clientState.identifier, lobbyCode: element.lobbyCode}})[0];
             console.log(userLobby);
             clientState.socket.send(SERVER_LOBBY_STATE_MESSAGES.CONNECTION_ACCEPTED.concat(JSON.stringify(userLobby)));
         break;       

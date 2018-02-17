@@ -1,21 +1,24 @@
 import * as React from "react";
 import { SERVER_MESSAGES, SERVER_MESSAGE_LENGTH } from '../constants/ProtocolMessages';
+import { SERVER_DRAW_MESSAGES } from "../../../server/src/constants/ServerToClientMessages";
 
 export interface DrawingCanvasProps {
     width: number,
     height: number,
     socket: WebSocket,
+    user: {identifier: number}
 }
 
 export interface DrawingCanvasState {
     mouseBtnPressed: boolean,
     drawPoints: {x: number, y:number}[],
-    drawTool: {
+    drawTools: {
+        user: number,
         id: string, 
         thickness: number,
         color: string,
         type: string,
-    },
+    }[],
 }
 
 const BRUSH_ID = "BRUSH";
@@ -30,17 +33,18 @@ export class ServerDrawingCanvas extends React.Component<DrawingCanvasProps, Dra
 
     constructor(props: any){
         super(props);
+        let ownDrawTool = 
+        {
+            user: this.props.user.identifier,
+            id: BRUSH_ID,
+            thickness: 5,
+            color: "#000000",
+            type: BUSH_TYPES.RECTANGULAR,
+        };
         this.state = {
             mouseBtnPressed: false,
             drawPoints:[],
-            drawTool:                    
-                {
-                    id: BRUSH_ID,
-                    thickness: 5,
-                    color: "#000000",
-                    type: BUSH_TYPES.RECTANGULAR,
-                },
-            
+            drawTools: [ownDrawTool],                 
         };
     }
 
@@ -49,13 +53,15 @@ export class ServerDrawingCanvas extends React.Component<DrawingCanvasProps, Dra
         this.props.socket.onmessage = (msg: MessageEvent) => {
             if(typeof msg.data == "string" && this.canvas != null){
                 let cmd = msg.data.substring(0, SERVER_MESSAGE_LENGTH);
-                let payload = JSON.parse(msg.data.substring(SERVER_MESSAGE_LENGTH));
-                let context = this.canvas.getContext("2d");
-                if(context != null){
-                    context.fillStyle = this.state.drawTool.color;
+                if([SERVER_DRAW_MESSAGES.CHANGE_TOOL, SERVER_DRAW_MESSAGES.DRAW_DOT, SERVER_DRAW_MESSAGES.DRAW_LINE].indexOf(cmd) != -1){
+                    let payload = JSON.parse(msg.data.substring(SERVER_MESSAGE_LENGTH));
+                    let context = this.canvas.getContext("2d");
+                    if(context == null) throw new DOMException();
+                    let drawTool = this.state.drawTools.find((tools) => tools.user == payload.user);
+                    if(drawTool == null) throw new DOMException("INVALID MESSAGE");
                     switch(cmd){
                         case SERVER_MESSAGES.SERVER_DRAW_MESSAGES.DRAW_DOT:
-                            switch(this.state.drawTool.type){
+                            switch(drawTool.type){
                                 case "RECTANGULAR":
                                     context.fillRect(payload.x, payload.y, payload.thickness/2, payload.thickness/2);
                                     break;
@@ -71,12 +77,11 @@ export class ServerDrawingCanvas extends React.Component<DrawingCanvasProps, Dra
                             context.stroke();
                             break;
                         case SERVER_MESSAGES.SERVER_DRAW_MESSAGES.CHANGE_TOOL:
-                            //TODO: Check this first
-                            this.setState({drawTool: payload});
+                                let newDrawTools = this.state.drawTools.filter((tool) => tool.user == payload.user).map((tool) => payload);
+                                this.setState({drawTools: payload});
                             break;
                     }
-                }else{
-                    //TODO: Error handling
+                   
                 }
             }else{
                 //TODO: Error handling
