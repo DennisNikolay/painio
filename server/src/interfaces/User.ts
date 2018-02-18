@@ -4,4 +4,5 @@ export interface User{
     socket: WebSocket,
     drawTool: any,
     identifier: number,
+    lastPong: number,
 }

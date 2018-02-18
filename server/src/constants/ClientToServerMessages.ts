@@ -2,6 +2,7 @@ export const CLIENT_MESSAGE_LENGTH = 3;
 
 export const CLIENT_LOBBY_STATE_MESSAGES = {
     "REQUEST_LOBBY": "LOB",
+    "PONG": "PON",
 };
 
 export const CLIENT_DRAW_MESSAGES = {

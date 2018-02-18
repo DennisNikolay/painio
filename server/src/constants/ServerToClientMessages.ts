@@ -2,13 +2,12 @@ export const SERVER_MESSAGE_LENGTH = 3;
 
 export const SERVER_LOBBY_STATE_MESSAGES = {
     "CONNECTION_ACCEPTED": "CON",
-
+    "PING": "PIN",
 };
 
 
 export const SERVER_ERROR_MESSAGES = {
     "PROTOCOL_ERROR": (error: string) => "PRE".concat(JSON.stringify({"error": error})),
-
 }
 
 export const SERVER_DRAW_MESSAGES = {
