@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import  { ClientDrawingCanvas  as DrawingCanvas} from "./components/ClientDrawingCanvas";
+import  { CanvasContainer  as GameStage} from "./containers/CanvasContainer";
 import { CLIENT_MESSAGES, SERVER_MESSAGES, SERVER_MESSAGE_LENGTH } from './constants/ProtocolMessages';
 
 const server = "ws://localhost:8999";
@@ -16,7 +16,8 @@ socket.onopen= (e: Event) => {
             let cmd = ev.data.substring(0, SERVER_MESSAGE_LENGTH);
             if(cmd == SERVER_MESSAGES.SERVER_LOBBY_STATE_MESSAGES.CONNECTION_ACCEPTED){
                 let payload = JSON.parse(ev.data.substring(SERVER_MESSAGE_LENGTH));
-                ReactDOM.render( <DrawingCanvas width={1280} height={1024} socket={socket} user={{identifier: payload.identfier}} />, document.getElementById("example"));
+                let identfier = payload.identfier as number;
+                ReactDOM.render( <GameStage width={1280} height={1024} socket={socket} user_id={identfier} />, document.getElementById("example"));
             }
         }
     }

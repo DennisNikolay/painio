@@ -20,12 +20,15 @@
     "url": "https://github.com/DennisNikolay/painio/issues"
   },
   "homepage": "https://github.com/DennisNikolay/painio#readme",
-  "dependencies": {},
+  "dependencies": {
+    "react-color": "^2.13.8"
+  },
   "devDependencies": {
     "@types/react": "^16.0.38",
     "@types/react-dom": "^16.0.4",
     "awesome-typescript-loader": "^3.4.1",
     "react": "^16.2.0",
+    "react-color": "^2.13.8",
     "react-dom": "^16.2.0",
     "source-map-loader": "^0.2.3",
     "typescript": "^2.7.2"

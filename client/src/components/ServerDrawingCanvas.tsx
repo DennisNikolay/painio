@@ -7,6 +7,7 @@ export interface DrawingCanvasProps {
     height: number,
     socket: WebSocket,
     user: {identifier: number}
+    onMountBehaviour: (c: ServerDrawingCanvas) => void
 }
 
 export interface DrawingCanvasState {
@@ -29,7 +30,7 @@ const BUSH_TYPES = {
 
 export class ServerDrawingCanvas extends React.Component<DrawingCanvasProps, DrawingCanvasState>{
 
-    protected canvas: (HTMLCanvasElement | null) = null; 
+    public canvas: (HTMLCanvasElement | null) = null; 
 
     constructor(props: any){
         super(props);
@@ -50,43 +51,7 @@ export class ServerDrawingCanvas extends React.Component<DrawingCanvasProps, Dra
 
 
     componentDidMount(){
-        this.props.socket.onmessage = (msg: MessageEvent) => {
-            if(typeof msg.data == "string" && this.canvas != null){
-                let cmd = msg.data.substring(0, SERVER_MESSAGE_LENGTH);
-                if([SERVER_DRAW_MESSAGES.CHANGE_TOOL, SERVER_DRAW_MESSAGES.DRAW_DOT, SERVER_DRAW_MESSAGES.DRAW_LINE].indexOf(cmd) != -1){
-                    let payload = JSON.parse(msg.data.substring(SERVER_MESSAGE_LENGTH));
-                    let context = this.canvas.getContext("2d");
-                    if(context == null) throw new DOMException();
-                    let drawTool = this.state.drawTools.find((tools) => tools.user == payload.user);
-                    if(drawTool == null) throw new DOMException("INVALID MESSAGE");
-                    switch(cmd){
-                        case SERVER_MESSAGES.SERVER_DRAW_MESSAGES.DRAW_DOT:
-                            switch(drawTool.type){
-                                case "RECTANGULAR":
-                                    context.fillRect(payload.x, payload.y, payload.thickness/2, payload.thickness/2);
-                                    break;
-                                case "CIRCULAR":
-                                    context.arc(payload.x, payload.y, payload.thickness, 0, 2*Math.PI);
-                                    break;
-                            }
-                            break;
-                        case SERVER_MESSAGES.SERVER_DRAW_MESSAGES.DRAW_LINE:
-                            context.beginPath(); 
-                            context.moveTo(payload.p.x, payload.p.y);
-                            context.lineTo(payload.q.x, payload.q.y);
-                            context.stroke();
-                            break;
-                        case SERVER_MESSAGES.SERVER_DRAW_MESSAGES.CHANGE_TOOL:
-                                let newDrawTools = this.state.drawTools.filter((tool) => tool.user == payload.user).map((tool) => payload);
-                                this.setState({drawTools: payload});
-                            break;
-                    }
-                   
-                }
-            }else{
-                //TODO: Error handling
-            }
-        }
+        this.props.onMountBehaviour(this);
     }
 
     render(){

@@ -16,13 +16,15 @@ const EchoServer = (server: Server) => {
         console.log("client connected");
         let clientState: User = {"lobby": "", "socket": ws, drawTool: {}, identifier: idCounter++};
         
+        ws.onerror = () => ws.close();
+
         ws.on('message', (message: string) => {
             let msg: false|Message = parseData(message, ws);
             console.log(msg);
             let newState = {clientState, appState, message: msg};
             let continueHandling = msg;
             messageHandlers.forEach((handler) => {
-                if(continueHandling){
+                if(continueHandling && ws.readyState == WebSocket.OPEN){
                     let result = handler(newState.clientState, newState.appState, <Message>msg);
                     if(result == false){
                         continueHandling = false;
