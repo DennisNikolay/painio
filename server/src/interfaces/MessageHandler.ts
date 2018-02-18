@@ -1,0 +1,2 @@
+import { User, Application, Message } from '../interfaces';
+export type MessageHandler = (clientState: User, appState: Application, msg: Message) => false | { clientState: User; appState: Application; };
