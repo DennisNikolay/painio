@@ -21,7 +21,8 @@ export const parseData: ((message: string, connection: WebSocket) =>(false|Messa
     let payload = message.substring(3);
     try{
         let jsonPayload = JSON.parse(payload);
-        return ({cmd, payload: jsonPayload});
+        let result = JSON.parse(JSON.stringify({cmd, payload: jsonPayload}));
+        return (result);
     }catch(e){
         connection.send(SERVER_ERROR_MESSAGES.PROTOCOL_ERROR("Invalid payload!"));
         connection.close();

@@ -17,7 +17,18 @@ const PING_TIME = 4000;
 */
 const USER_TIMEOUT = 9000;
 
+const BRUSH_ID = "BRUSH";
+const BUSH_TYPES = {
+   RECTANGULAR: "RECTANGULAR",
+   CIRCULAR: "CIRCULAR"
+};
 
+const DEFAULT_DRAWTOOL = {
+    id: BRUSH_ID,
+    thickness: 5,
+    color: "#000000",
+    type: BUSH_TYPES.RECTANGULAR,
+};
 
 const EchoServer = (server: Server) => {
     let idCounter: number = 0;
@@ -28,12 +39,27 @@ const EchoServer = (server: Server) => {
     ws.on('connection', (ws: WebSocket) => {
         console.log("client connected");
         let safeSocket = new ErrorSafeWebSocket(ws);
-        let clientState: User = {"lobby": "", "socket": safeSocket, drawTool: {}, identifier: idCounter++, lastPong: Date.now()};
+
+        let userId=idCounter++;
+        let clientState: User = {"lobby": "", "socket": safeSocket, drawTool: {...DEFAULT_DRAWTOOL, user: userId}, identifier: userId, lastPong: Date.now()};
         
         let pinger = setInterval(() => {
             safeSocket.send(SERVER_LOBBY_STATE_MESSAGES.PING.concat(JSON.stringify({})));
         }, PING_TIME);
 
+
+        let checkConnection = () => {
+            appState.lobbies.forEach((lobby, lobbyIndex) => {
+                lobby.users.forEach((user, userIndex) => {
+                    if(Date.now() - user.lastPong > USER_TIMEOUT){
+                        console.log("Removing user with id: ".concat(user.identifier.toString()).concat(" from lobby: ".concat(clientState.lobby)));
+                        appState.lobbies[lobbyIndex].users.splice(userIndex,1);
+                    }
+                })
+            })
+        };
+
+        setInterval(checkConnection, USER_TIMEOUT);
 
 
         const disconnectUser = () => {
@@ -51,17 +77,6 @@ const EchoServer = (server: Server) => {
             })
             ws.close();
         }
-
-        let checkConnection = setInterval(() => {
-            appState.lobbies.forEach((lobby, lobbyIndex) => {
-                lobby.users.forEach((user, userIndex) => {
-                    if(Date.now() - user.lastPong > USER_TIMEOUT){
-                        console.log("Removing user with id: ".concat(user.identifier.toString()).concat(" from lobby: ".concat(clientState.lobby)));
-                        appState.lobbies[lobbyIndex].users.splice(userIndex,1);
-                    }
-                })
-            })
-        }, USER_TIMEOUT);
 
         ws.onclose = disconnectUser;
         ws.onerror = disconnectUser

@@ -3,6 +3,7 @@ export const SERVER_MESSAGE_LENGTH = 3;
 export const SERVER_LOBBY_STATE_MESSAGES = {
     "CONNECTION_ACCEPTED": "CON",
     "PING": "PIN",
+    "NEW_USER": "NUS",
 };
 
 

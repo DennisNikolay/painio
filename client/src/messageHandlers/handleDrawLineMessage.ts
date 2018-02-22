@@ -13,6 +13,10 @@ export const handleDrawLineMessage = (msg: Message, drawingComponent: ServerDraw
     }
     if(msg.cmd == SERVER_MESSAGES.SERVER_DRAW_MESSAGES.DRAW_LINE){
         context.beginPath(); 
+        let userTool = drawingComponent.state.drawTools.find((tool) => tool.user == msg.payload.user);
+        if(userTool == undefined)
+            throw new DOMException("Illegal State, user not found!");
+        context.strokeStyle = userTool.color;
         context.moveTo(msg.payload.p.x, msg.payload.p.y);
         context.lineTo(msg.payload.q.x, msg.payload.q.y);
         context.stroke();

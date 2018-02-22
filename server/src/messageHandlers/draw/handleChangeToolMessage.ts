@@ -7,6 +7,7 @@ const TOOL_INTERFACE = {
     thickness: "",
     color: "",
     type: "",
+    user: "",
 }
 
 /**
@@ -24,10 +25,10 @@ export const handleChangeToolMessage: MessageHandler = (clientState: User, appSt
         }
         clientState.drawTool = msg.payload;
         let ownLobby = appState.lobbies.filter((element: Lobby) => element.lobbyCode == clientState.lobby)[0];
-        msg.payload.user = clientState.identifier;
         ownLobby.users.forEach(
             (user: User) => {
-                user.socket.send(SERVER_DRAW_MESSAGES.CHANGE_TOOL.concat(JSON.stringify(msg.payload)));
+                let newPayload = { ...msg.payload, user: clientState.identifier.toString() }
+                user.socket.send(SERVER_DRAW_MESSAGES.CHANGE_TOOL.concat(JSON.stringify(newPayload)));
             }
         );
     }

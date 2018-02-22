@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { SketchPicker, ColorChangeHandler } from "react-color";
+import { SketchPicker, ColorChangeHandler } from 'react-color';
 
 export const Toolbar = (
     props: 
     {
-        onColorChange: ColorChangeHandler
+        onColorChangeComplete: ColorChangeHandler,
+        color: string
     }
-) => {
-    <SketchPicker onChange={props.onColorChange}/>
-}
+) => <SketchPicker onChangeComplete={props.onColorChangeComplete} color={props.color}/>;

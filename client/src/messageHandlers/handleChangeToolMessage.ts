@@ -15,7 +15,6 @@ export const handleChangeToolMessage = (msg: Message, drawingComponent: ServerDr
         let index = drawingComponent.state.drawTools.findIndex((tool) => tool.user == msg.payload.user);
         let newDrawTools = drawingComponent.state.drawTools;
         let newUserTool = msg.payload;
-        delete newUserTool.user;
         newDrawTools[index] = newUserTool;
         drawingComponent.setState({drawTools: newDrawTools});
     }

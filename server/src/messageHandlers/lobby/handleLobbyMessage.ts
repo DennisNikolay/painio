@@ -23,8 +23,27 @@ export const handleLobbyMessage: MessageHandler = (clientState: User, appState: 
         }else{
             handleLobbyRequested(clientState, appState, msg);
         }
-        let userLobby = appState.lobbies.filter((element: Lobby) => element.lobbyCode == clientState.lobby).map((element: Lobby) => {return {user_identifier: clientState.identifier, lobbyCode: element.lobbyCode}})[0];
-        console.log(userLobby);
+        let userLobby = appState.lobbies
+        .filter(
+            (element: Lobby) => element.lobbyCode == clientState.lobby
+        )
+        .map(
+            (element: Lobby) => 
+            {
+                return( 
+                    {
+                        user_identifier: clientState.identifier,
+                        lobbycode: element.lobbyCode, 
+                        users: element.users.map((user: User) => {
+                            return {
+                                drawTool: user.drawTool, 
+                                identifier: user.identifier
+                            }
+                        })
+                    }
+                )
+            }
+        )[0];
         clientState.socket.send(SERVER_LOBBY_STATE_MESSAGES.CONNECTION_ACCEPTED.concat(JSON.stringify(userLobby)));
     }
     return {clientState, appState};   
@@ -67,9 +86,12 @@ const errorHandler = (clientState: User, msg: Message) => {
 const handleLobbyRequested = (clientState: User, appState: Application, msg: Message) => {
     if(msg.payload.requested_lobby != ""){
         clientState.lobby = msg.payload.requested_lobby;
+
+        ///TODO: Check if lobby is full. If yes, send error
         let userLobby = appState.lobbies.find(
             (element: Lobby) => element.lobbyCode == msg.payload.requested_lobby
         );
+        
         if(userLobby != undefined)
             userLobby.users.push(clientState); 
         else{
@@ -105,6 +127,7 @@ const handleNoLobbyRequested = (clientState: User, appState: Application, msg: M
         }else{
             let index: number = Math.floor(Math.random()*(validLobbies.length-1));
             clientState.lobby = validLobbies[index].lobbyCode;
+            validLobbies[index].users.forEach((user) => user.socket.send(SERVER_LOBBY_STATE_MESSAGES.NEW_USER.concat(JSON.stringify({...clientState.drawTool, identifier: clientState.identifier}))));
             validLobbies[index].users.push(clientState);
         }
 }
