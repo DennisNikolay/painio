@@ -19,6 +19,9 @@ socket.onopen= (e: Event) => {
             let cmd = ev.data.substring(0, SERVER_MESSAGE_LENGTH);
             if(cmd == SERVER_MESSAGES.SERVER_LOBBY_STATE_MESSAGES.CONNECTION_ACCEPTED){
                 let payload = JSON.parse(ev.data.substring(SERVER_MESSAGE_LENGTH));
+                console.log(payload);
+                var stateDescription = {info: "LOREM IPSUM"};
+                history.pushState(stateDescription, "lobby", "?".concat(payload.lobbycode));
                 let identfier = payload.user_identifier;
                 ReactDOM.render( <CanvasContainer width={1280} height={1024} socket={socket} user_id={identfier} users={payload.users} />, document.getElementById("example"));
             }
