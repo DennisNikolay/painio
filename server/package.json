@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/DennisNikolay/painio#readme",
   "dependencies": {
+    "@types/randomstring": "^1.1.6",
     "express": "^4.16.2",
     "randomstring": "^1.1.5",
     "ws": "^4.0.0"

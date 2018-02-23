@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/DennisNikolay/painio#readme",
   "dependencies": {
+    "@types/react-color": "^2.13.4",
     "react-color": "^2.13.8"
   },
   "devDependencies": {
