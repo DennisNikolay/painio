@@ -92,8 +92,10 @@ const handleLobbyRequested = (clientState: User, appState: Application, msg: Mes
             (element: Lobby) => element.lobbyCode == msg.payload.requested_lobby
         );
         
-        if(userLobby != undefined)
+        if(userLobby != undefined){
+            userLobby.users.forEach((user) => user.socket.send(SERVER_LOBBY_STATE_MESSAGES.NEW_USER.concat(JSON.stringify({...clientState.drawTool, identifier: clientState.identifier}))));
             userLobby.users.push(clientState); 
+        }
         else{
             let lobby: Lobby = 
             {
