@@ -8,7 +8,11 @@ export const SERVER_LOBBY_STATE_MESSAGES = {
 
 
 export const SERVER_ERROR_MESSAGES = {
-    "PROTOCOL_ERROR": (error: string) => "PRE".concat(JSON.stringify({"error": error})),
+    "PROTOCOL_ERROR": (error: string) => "PRE".concat(
+        JSON.stringify(
+            {"error": error}
+        )
+    ),
 }
 
 export const SERVER_DRAW_MESSAGES = {
@@ -21,7 +25,6 @@ export const SERVER_MESSAGES = {
     SERVER_LOBBY_STATE_MESSAGES,
     SERVER_DRAW_MESSAGES
 }
-
 
 
 export default SERVER_MESSAGES;

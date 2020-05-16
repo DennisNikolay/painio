@@ -14,7 +14,7 @@ import * as random from 'randomstring';
  * @param msg the received message
  */
 export const handlePongMessage: MessageHandler = (clientState: User, appState: Application, msg: Message) => {
-    if(msg.cmd == CLIENT_LOBBY_STATE_MESSAGES.PONG){
+   if(msg.cmd == CLIENT_LOBBY_STATE_MESSAGES.PONG){
         clientState.lastPong = Date.now();
     }
     return {clientState, appState};   
