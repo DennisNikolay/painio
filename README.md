@@ -1,4 +1,5 @@
 # painio
+A canvas to draw on with friends in your browser. Supports different lobbies.
 ##SETUP
 1. install npm
 2. install tsc with "npm install -g typescript"
